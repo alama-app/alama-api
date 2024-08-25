@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to Alama App API!');
 });
 
-const specs = swaggerJsDoc(options);
+const specs = swaggerJSDoc(options);
 
 app.use(
     "/api-docs",

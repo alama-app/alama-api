@@ -71,7 +71,7 @@ const swaggerSpec = swaggerJSDoc(options);
 // };
 
 const setupSwagger = (app) => {
-    const specs = swaggerJsDoc(options);
+    const specs = swaggerJSDoc(options);
     app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs, { customCssUrl: CSS_URL }));
 
     app.get('/swagger.json', (req, res) => {
