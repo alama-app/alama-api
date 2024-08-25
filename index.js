@@ -1,6 +1,9 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const dotenv = require('dotenv');
+const cors = require('cors');
+
+
 const businessOwnerRoutes = require('./routes/businessOwnerRoutes');
 const businessRoutes = require('./routes/businessRoutes');
 const staffRoutes = require('./routes/staffRoutes');
@@ -13,8 +16,8 @@ const orderRoutes = require('./routes/orderRoutes');
 const setupSwagger = require('./swagger');
 
 dotenv.config();
-
 const app = express();
+app.use(cors());
 
 connectDB();
 
@@ -24,6 +27,11 @@ setupSwagger(app);
 
 app.get('/', (req, res) => {
     res.send('Welcome to Alama App API!');
+});
+
+app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
 });
 
 // Routes
