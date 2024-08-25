@@ -111,18 +111,18 @@ router.get('/', getAllBusinesses);
  * @swagger
  * /api/businesses/{id}:
  *   get:
- *     summary: Get the business by id
+ *     summary: Get the business by business_owner_id
  *     tags: [Businesses]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: business_owner_id
  *         schema:
  *           type: string
  *         required: true
- *         description: The business id
+ *         description: The business owner id
  *     responses:
  *       200:
- *         description: The business description by id
+ *         description: The business description by business_owner_id
  *         content:
  *           application/json:
  *             schema:

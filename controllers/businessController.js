@@ -22,7 +22,8 @@ const getAllBusinesses = async (req, res) => {
 
 const getBusinessById = async (req, res) => {
     try {
-        const business = await Business.findById(req.params.id);
+        // const business = await Business.findById(req.params.id);
+        const business = await Business.findOne({ business_owner_id: req.params.id });
         if (!business) return res.status(404).json({ message: 'Business not found' });
         res.status(200).json(business);
     } catch (error) {
