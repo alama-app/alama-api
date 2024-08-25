@@ -70,4 +70,14 @@ const swaggerSpec = swaggerJSDoc(options);
 //     }));
 // };
 
+const setupSwagger = (app) => {
+    const specs = swaggerJsDoc(options);
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs, { customCssUrl: CSS_URL }));
+
+    app.get('/swagger.json', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(specs);
+    });
+};
+
 module.exports = setupSwagger;
