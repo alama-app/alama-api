@@ -3,14 +3,15 @@ const cloudinary = require('../config/cloudinaryConfig');
 
 const registerFood = async (req, res) => {
   try {
+    console.log("Inside register");
     const { path: url1 } = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'foods' });
     const { path: url2 } = await cloudinary.uploader.upload(req.files.url2[0].path, { folder: 'foods' });
-
+ console.log("Adding Food")
     const newFood = new Food({
       ...req.body,
       food_image: { url1, url2 }
     });
-
+console.log("Saving food!");
     await newFood.save();
     res.status(201).json(newFood);
   } catch (error) {
