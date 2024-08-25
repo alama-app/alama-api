@@ -88,6 +88,17 @@ const morgan = require('morgan');
 
 const setupSwagger = require('./swagger');
 
+
+const businessOwnerRoutes = require('./routes/businessOwnerRoutes');
+const businessRoutes = require('./routes/businessRoutes');
+const staffRoutes = require('./routes/staffRoutes');
+const foodRoutes = require('./routes/foodRoutes'); 
+const fruitRoutes = require('./routes/fruitRoutes');
+const addonRoutes = require('./routes/addonRoutes');
+const hotDrinkRoutes = require('./routes/hotDrinkRoutes'); 
+const softDrinkRoutes = require('./routes/softDrinkRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
 dotenv.config();
 const app = express();
 app.use(bodyParser.json());
