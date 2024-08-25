@@ -33,10 +33,10 @@
 
 
 
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const swaggerUiDist = require('swagger-ui-dist');
-const path = require('path');
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import swaggerUiDist from 'swagger-ui-dist';
+import path from 'path';
 
 
 const options = {
@@ -80,4 +80,4 @@ const setupSwagger = (app) => {
     });
 };
 
-module.exports = setupSwagger;
+export default setupSwagger;

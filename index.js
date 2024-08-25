@@ -17,7 +17,7 @@ const addonRoutes = require('./routes/addonRoutes');
 const hotDrinkRoutes = require('./routes/hotDrinkRoutes'); 
 const softDrinkRoutes = require('./routes/softDrinkRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const setupSwagger = require('./swagger');
+const setupSwagger = require('./swagger').default;
 
 dotenv.config();
 const app = express();
