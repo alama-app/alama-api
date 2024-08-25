@@ -50,22 +50,24 @@ const options = {
         servers: [
             {
                 url: 'https://alama-api.vercel.app/',
+                description: "My API Documentation",
             },
         ],
     },
-    apis: ['./routes/*.js', './models/*.js'], 
+    // apis: ['./routes/*.js', './models/*.js'], 
+    apis: ["src/**/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-const setupSwagger = (app) => {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-        swaggerOptions: {
-            url: '/swagger.json' 
-        },
-        customCssUrl: `${swaggerUiDist.getAbsoluteFSPath()}/swagger-ui.css`,
-        customJsUrl: `${swaggerUiDist.getAbsoluteFSPath()}/swagger-ui-bundle.js`,
-    }));
-};
+// const setupSwagger = (app) => {
+//     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+//         swaggerOptions: {
+//             url: '/swagger.json' 
+//         },
+//         customCssUrl: `${swaggerUiDist.getAbsoluteFSPath()}/swagger-ui.css`,
+//         customJsUrl: `${swaggerUiDist.getAbsoluteFSPath()}/swagger-ui-bundle.js`,
+//     }));
+// };
 
 module.exports = setupSwagger;

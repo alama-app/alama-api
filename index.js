@@ -2,7 +2,10 @@ const express = require('express');
 const connectDB = require('./config/db');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
+const CSS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
 const businessOwnerRoutes = require('./routes/businessOwnerRoutes');
 const businessRoutes = require('./routes/businessRoutes');
@@ -17,7 +20,9 @@ const setupSwagger = require('./swagger');
 
 dotenv.config();
 const app = express();
+app.use(bodyParser.json());
 app.use(cors());
+app.use(morgan("dev"));
 
 connectDB();
 
@@ -25,13 +30,23 @@ app.use(express.json());
 
 setupSwagger(app);
 
-app.get('/', (req, res) => {
-    res.send('Welcome to Alama App API!');
-});
+
+
+const specs = swaggerJsDoc(options);
+
+app.use(
+    "/api-docs",
+    swaggerUI.serve,
+    swaggerUI.setup(specs, { customCssUrl: CSS_URL })
+  );
 
 app.get('/swagger.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
+});
+
+app.get('/', (req, res) => {
+    res.send('Welcome to Alama App API!');
 });
 
 // Routes
