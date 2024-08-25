@@ -31,6 +31,9 @@ app.use(express.json());
 setupSwagger(app);
 
 
+app.get('/', (req, res) => {
+    res.send('Welcome to Alama App API!');
+});
 
 const specs = swaggerJsDoc(options);
 
@@ -45,9 +48,6 @@ app.get('/swagger.json', (req, res) => {
     res.send(swaggerSpec);
 });
 
-app.get('/', (req, res) => {
-    res.send('Welcome to Alama App API!');
-});
 
 // Routes
 app.use('/api/business_owners', businessOwnerRoutes);
