@@ -88,8 +88,52 @@
 
 
 
+// const swaggerJsDoc = require('swagger-jsdoc');
+// const swaggerUI = require('swagger-ui-express'); // Import swagger-ui-express
+
+// const options = {
+//     definition: {
+//         openapi: "3.0.0",
+//         info: {
+//             title: "API Documentation",
+//             version: "1.0.0",
+//             description: "API Documentation for Alama App",
+//         },
+//         servers: [
+//             {
+//                 url: "http://localhost:4000",
+//             },
+//         ],
+//     },
+//     apis: ["./routes/*.js"], // Path to the API docs
+// };
+
+// const swaggerSpec = swaggerJsDoc(options);
+
+// function setupSwagger(app) {
+//     app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+//     app.get('/swagger.json', (req, res) => {
+//         res.setHeader('Content-Type', 'application/json');
+//         res.send(swaggerSpec);
+//     });
+// }
+
+// module.exports = setupSwagger;
+
+
+
+
+
+
+
+
+
+
+
+
 const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express'); // Import swagger-ui-express
+const swaggerUI = require('swagger-ui-express');
+const path = require('path');
 
 const options = {
     definition: {
@@ -101,11 +145,11 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:4000",
+                url: process.env.SWAGGER_SERVER_URL || "http://localhost:4000",
             },
         ],
     },
-    apis: ["./routes/*.js"], // Path to the API docs
+    apis: [path.join(__dirname, 'routes/*.js')], // Adjust path as necessary
 };
 
 const swaggerSpec = swaggerJsDoc(options);
