@@ -131,10 +131,46 @@
 
 
 
+// const swaggerJsDoc = require('swagger-jsdoc');
+// const swaggerUI = require('swagger-ui-express');
+// const path = require('path');
+
+// const options = {
+//     definition: {
+//         openapi: "3.0.0",
+//         info: {
+//             title: "API Documentation",
+//             version: "1.0.0",
+//             description: "API Documentation for Alama App",
+//         },
+//         servers: [
+//             {
+//                 url: process.env.SWAGGER_SERVER_URL || "http://localhost:4000",
+//             },
+//         ],
+//     },
+//     apis: [path.join(__dirname, 'routes/*.js')], // Adjust path as necessary
+// };
+
+// const swaggerSpec = swaggerJsDoc(options);
+
+// function setupSwagger(app) {
+//     app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+//     app.get('/swagger.json', (req, res) => {
+//         res.setHeader('Content-Type', 'application/json');
+//         res.send(swaggerSpec);
+//     });
+// }
+
+// module.exports = setupSwagger;
+
+
+
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 
+// Define the Swagger documentation options
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -152,10 +188,15 @@ const options = {
     apis: [path.join(__dirname, 'routes/*.js')], // Adjust path as necessary
 };
 
+// Generate the Swagger specification
 const swaggerSpec = swaggerJsDoc(options);
 
 function setupSwagger(app) {
-    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+    // Serve Swagger UI with custom CSS URL (optional)
+    const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec, { customCssUrl: CSS_URL }));
+
+    // Endpoint to access Swagger JSON
     app.get('/swagger.json', (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(swaggerSpec);
