@@ -89,7 +89,7 @@
 
 
 const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express'); // Import swagger-ui-express
+const swaggerUI = require('swagger-ui-express'); 
 
 const options = {
     definition: {
@@ -101,11 +101,13 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:4000",
+                // url: "http://localhost:4000",
+                url: 'https://alama-api.vercel.app',
+                description: "My API Documentation",
             },
         ],
     },
-    apis: ["./routes/*.js"], // Path to the API docs
+    apis: ["./routes/*.js"], 
 };
 
 const swaggerSpec = swaggerJsDoc(options);
