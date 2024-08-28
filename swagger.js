@@ -245,7 +245,7 @@ const options = {
             },
         ],
     },
-    apis: [path.join(__dirname, 'routes/*.js')], // Adjust path as necessary
+    apis: [path.join(__dirname, 'routes/*.js')], 
 };
 
 // Generate the Swagger specification
