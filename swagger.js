@@ -253,8 +253,8 @@ const swaggerSpec = swaggerJsDoc(options);
 
 function setupSwagger(app) {
     // Serve Swagger UI with custom CSS URL
-    const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec, { customCssUrl: CSS_URL }));
+    // const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
     // Endpoint to access Swagger JSON
     app.get('/swagger.json', (req, res) => {
