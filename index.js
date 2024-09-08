@@ -24,7 +24,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan("dev"));
-console.log('businessOwnerRoutes:', businessOwnerRoutes);
 connectDB();
 
 app.use(express.json());

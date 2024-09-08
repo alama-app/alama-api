@@ -1,23 +1,52 @@
 const Food = require('../models/Food');
 const cloudinary = require('../config/cloudinaryConfig');
 
+// const registerFood = async (req, res) => {
+//   try {
+//     console.log("Inside register");
+//     const { path: url1 } = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'foods' });
+//     const { path: url2 } = await cloudinary.uploader.upload(req.files.url2[0].path, { folder: 'foods' });
+//  console.log("Adding Food")
+//     const newFood = new Food({
+//       ...req.body,
+//       food_image: { url1, url2 }
+//     });
+// console.log("Saving food!");
+//     await newFood.save();
+//     res.status(201).json(newFood);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
 const registerFood = async (req, res) => {
   try {
-    console.log("Inside register");
-    const { path: url1 } = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'foods' });
-    const { path: url2 } = await cloudinary.uploader.upload(req.files.url2[0].path, { folder: 'foods' });
- console.log("Adding Food")
+    // Log the files received from the request
+    console.log("Files received:", req.files);
+
+    // Upload the first image to Cloudinary and log the result
+    const uploadResult1 = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'foods' });
+    const url1 = uploadResult1.path;
+    console.log("Uploaded url1:", uploadResult1);
+
+    // Upload the second image to Cloudinary and log the result
+    const uploadResult2 = await cloudinary.uploader.upload(req.files.url2[0].path, { folder: 'foods' });
+    const url2 = uploadResult2.path;
+    console.log("Uploaded url2:", uploadResult2);
+
+    console.log("Adding Food");
     const newFood = new Food({
       ...req.body,
       food_image: { url1, url2 }
     });
-console.log("Saving food!");
+
+    console.log("Saving food!");
     await newFood.save();
     res.status(201).json(newFood);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 const getAllFoods = async (req, res) => {
   try {

@@ -72,6 +72,28 @@ const deleteBusinessOwner = async (req, res) => {
 };
 
 // Login a business owner
+// const loginBusinessOwner = async (req, res) => {
+//     try {
+//         const { email, phone, password } = req.body;
+//         const businessOwner = await BusinessOwner.findOne({ $or: [{ email }, { phone }] });
+//         if (!businessOwner) {
+//             return res.status(404).json({ message: 'Business owner not found' });
+//         }
+//         const isMatch = await bcrypt.compare(password, businessOwner.password);
+//         if (!isMatch) {
+//             return res.status(400).json({ message: 'Invalid credentials' });
+//         }
+//         const token = jwt.sign(
+//             { id: businessOwner._id, email: businessOwner.email },
+//             process.env.JWT_SECRET,
+//             { expiresIn: '1h' }
+//         );
+//         res.status(200).json({ token });
+//     } catch (error) {
+//         res.status(400).json({ message: error.message });
+//     }
+// };
+
 const loginBusinessOwner = async (req, res) => {
     try {
         const { email, phone, password } = req.body;
@@ -79,18 +101,57 @@ const loginBusinessOwner = async (req, res) => {
         if (!businessOwner) {
             return res.status(404).json({ message: 'Business owner not found' });
         }
+
         const isMatch = await bcrypt.compare(password, businessOwner.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
+
         const token = jwt.sign(
             { id: businessOwner._id, email: businessOwner.email },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-        res.status(200).json({ token });
+
+        const refreshToken = jwt.sign(
+            { id: businessOwner._id, email: businessOwner.email },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.status(200).json({
+            message: 'Login successful',
+            user: businessOwner,
+            token,
+            refreshToken
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+};
+
+const refreshToken = async (req, res) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+        return res.status(400).json({ message: 'Refresh token is required' });
+    }
+
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+        const newToken = jwt.sign(
+            { id: decoded.id, email: decoded.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({
+            token: newToken,
+            message: 'Token refreshed successfully'
+        });
+    } catch (error) {
+        res.status(401).json({ message: 'Invalid refresh token' });
     }
 };
 
@@ -99,6 +160,7 @@ module.exports = {
     getAllBusinessOwners,
     getBusinessOwnerById,
     updateBusinessOwner,
+    refreshToken,
     deleteBusinessOwner,
     loginBusinessOwner
 };

@@ -5,7 +5,8 @@ const {
     getBusinessOwnerById,
     updateBusinessOwner,
     deleteBusinessOwner,
-    loginBusinessOwner
+    loginBusinessOwner,
+    refreshToken
 } = require('../controllers/businessOwnerController');
 const hashPassword = require('../middlewares/hashPassword');
 
@@ -217,5 +218,43 @@ router.delete('/:id', deleteBusinessOwner);
  *         description: Business owner not found
  */
 router.post('/login', loginBusinessOwner);
+
+/**
+ * @swagger
+ * /api/business_owners/refresh_token:
+ *   post:
+ *     summary: Refresh the access token
+ *     tags: [BusinessOwners]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *             required:
+ *               - refreshToken
+ *     responses:
+ *       200:
+ *         description: Successfully refreshed token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: New JWT token
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Invalid refresh token
+ */
+router.post('/refresh_token', refreshToken);
+
 
 module.exports = router;
