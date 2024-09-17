@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const foodImageSchema = new mongoose.Schema({
   url1: { type: String, required: true },
-  url2: { type: String, required: true }
+  // url2: { type: String, required: true }
 });
 
 const foodPriceSchema = new mongoose.Schema({

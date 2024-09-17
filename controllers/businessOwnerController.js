@@ -109,13 +109,13 @@ const loginBusinessOwner = async (req, res) => {
 
         const token = jwt.sign(
             { id: businessOwner._id, email: businessOwner.email },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || 'secret125',
             { expiresIn: '1h' }
         );
 
         const refreshToken = jwt.sign(
             { id: businessOwner._id, email: businessOwner.email },
-            process.env.JWT_REFRESH_SECRET,
+            process.env.JWT_REFRESH_SECRET || 'secret2125',
             { expiresIn: '7d' }
         );
 
@@ -138,11 +138,11 @@ const refreshToken = async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || 'secret2125');
 
         const newToken = jwt.sign(
             { id: decoded.id, email: decoded.email },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || 'secret125',
             { expiresIn: '1h' }
         );
 

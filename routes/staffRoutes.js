@@ -1,4 +1,8 @@
 const express = require('express');
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinaryConfig'); 
+
 const {
     registerStaff,
     staffLogin,
@@ -8,6 +12,16 @@ const {
 } = require('../controllers/staffController');
 
 const router = express.Router();
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'staff_images',
+        allowed_formats: ['jpg', 'png']
+    }
+});
+
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -44,6 +58,15 @@ const router = express.Router();
  *         staff_category:
  *           type: string
  *           description: Category of the staff
+ *         email:
+ *           type: string
+ *           description: Email of the staff
+ *         phone:
+ *           type: string
+ *           description: Phone number of the staff
+ *         staff_image:
+ *           type: string
+ *           description: URL of the staff image
  *       example:
  *         business_owner_id: "60d5ec49f4867c1a2c85b2e8"
  *         business_id: "60d5ec49f4867c1a2c85b2e9"
@@ -51,6 +74,9 @@ const router = express.Router();
  *         staff_designation: "Manager"
  *         staff_code: "STF123"
  *         staff_category: "Admin"
+ *         email: "jane.doe@example.com"
+ *         phone: "+1 (108) 648-4654"
+ *         staff_image: "http://example.com/image.jpg"
  */
 
 /**
@@ -69,9 +95,29 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Staff'
+ *             type: object
+ *             properties:
+ *               business_owner_id:
+ *                 type: string
+ *               business_id:
+ *                 type: string
+ *               staff_name:
+ *                 type: string
+ *               staff_designation:
+ *                 type: string
+ *               staff_code:
+ *                 type: string
+ *               staff_category:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: The staff was successfully registered
@@ -82,7 +128,7 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post('/', registerStaff);
+router.post('/', upload.single('image'), registerStaff);
 
 /**
  * @swagger

@@ -1,15 +1,83 @@
 const Staff = require('../models/Staff');
+const cloudinary = require('../config/cloudinaryConfig');
 
-const registerStaff = async (req, res) => {
+// const registerStaff = async (req, res) => {
+//     try {
+//         const { business_owner_id, business_id, staff_name, staff_designation, staff_code, staff_category } = req.body;
+//         const newStaff = new Staff({ business_owner_id, business_id, staff_name, staff_designation, staff_code, staff_category });
+//         await newStaff.save();
+//         res.status(201).json({ message: 'Staff registered successfully', staff: newStaff });
+//     } catch (error) {
+//         res.status(400).json({ message: error.message });
+//     }
+// };
+
+// const registerStaff = async (req, res) => {
+//     console.log("Inside Staff register");
+//     try {
+//       const { business_owner_id, business_id, staff_name, staff_designation, staff_code, staff_category } = req.body;
+      
+//       const staffData = {
+//         business_owner_id,
+//         business_id,
+//         staff_name,
+//         staff_designation,
+//         staff_code,
+//         staff_category
+//       };
+  
+//       if (req.files && req.files.image) {
+//         const uploadResult = await cloudinary.uploader.upload(req.files.image[0].path, { folder: 'staffs' });
+//         console.log("Uploaded image URL:", uploadResult.url);
+//         staffData.staff_image = uploadResult.url; 
+//       }
+  
+//       const newStaff = new Staff(staffData);
+  
+//       await newStaff.save();
+  
+//       res.status(201).json({ message: 'Staff registered successfully', staff: newStaff });
+//     } catch (error) {
+//       res.status(400).json({ message: error.message });
+//     }
+//   };
+
+  const registerStaff = async (req, res) => {
+    console.log(req.body);
     try {
-        const { business_owner_id, business_id, staff_name, staff_designation, staff_code, staff_category } = req.body;
-        const newStaff = new Staff({ business_owner_id, business_id, staff_name, staff_designation, staff_code, staff_category });
-        await newStaff.save();
-        res.status(201).json({ message: 'Staff registered successfully', staff: newStaff });
+      const { business_owner_id, business_id, staff_name, staff_designation, staff_code, staff_category, email, phone } = req.body;
+  
+      if (!business_owner_id || !business_id || !staff_name || !staff_designation || !staff_code || !staff_category) {
+        return res.status(400).json({ message: 'Required fields are missing' });
+      }
+      
+      const staffData = {
+        business_owner_id,
+        business_id,
+        staff_name,
+        staff_designation,
+        staff_code,
+        staff_category,
+        email,
+        phone
+      };
+  
+      if (req.files && req.files.image) {
+        const uploadResult = await cloudinary.uploader.upload(req.files.image[0].path, { folder: 'staffs' });
+        console.log("Uploaded image URL:", uploadResult.url);
+        staffData.staff_image = uploadResult.url; 
+      }
+  
+      const newStaff = new Staff(staffData);
+  
+      await newStaff.save();
+  
+      res.status(201).json({ message: 'Staff registered successfully', staff: newStaff });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+      res.status(400).json({ message: error.message });
     }
-};
+  };
+  
 
 const staffLogin = async (req, res) => {
     try {
