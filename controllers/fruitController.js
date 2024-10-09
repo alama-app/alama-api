@@ -3,25 +3,16 @@ const cloudinary = require('../config/cloudinaryConfig');
 
 const registerFruit = async (req, res) => {
   try {
-    const { business_id, fruit_name, meal_category, category, fruit_image, fruit_price, fruit_availability, fruit_description, preparation_time } = req.body;
 
-    // Upload images to Cloudinary
-    const uploadedImage1 = await cloudinary.uploader.upload(fruit_image.url1, { folder: 'fruits' });
-    const uploadedImage2 = await cloudinary.uploader.upload(fruit_image.url2, { folder: 'fruits' });
+    const uploadResult1 = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'fruits' });
+    const url1 = uploadResult1.url;
+
 
     const newFruit = new Fruit({
-      business_id,
-      fruit_name,
-      meal_category,
-      category,
+    ...req.body,
       fruit_image: {
-        url1: uploadedImage1.secure_url,
-        url2: uploadedImage2.secure_url,
-      },
-      fruit_price,
-      fruit_availability,
-      fruit_description,
-      preparation_time,
+        url1
+      }
     });
 
     await newFruit.save();

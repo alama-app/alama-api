@@ -18,6 +18,7 @@ const addonRoutes = require('./routes/addonRoutes');
 const hotDrinkRoutes = require('./routes/hotDrinkRoutes'); 
 const softDrinkRoutes = require('./routes/softDrinkRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const tableRoutes = require('./routes/tableRoutes');
 
 dotenv.config();
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api/addons', addonRoutes);
 app.use('/api/hotDrinks', hotDrinkRoutes);
 app.use('/api/softDrinks', softDrinkRoutes); 
 app.use('/api/orders', orderRoutes); 
+app.use('/api/tables', tableRoutes); 
 
 const PORT = process.env.PORT || 4000;
 

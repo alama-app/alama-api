@@ -7,8 +7,20 @@ const {
   updateHotDrink,
   deleteHotDrink,
 } = require('../controllers/hotDrinkController');
-
 const router = express.Router();
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'hot_drink_images',
+    allowed_formats: ['jpg', 'png']
+  }
+});
+
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -95,7 +107,7 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/HotDrink'
  *     responses:
@@ -108,7 +120,8 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post('/', registerHotDrink);
+router.post('/', upload.fields([{ name: 'url1' }, { name: 'url2' }]), registerHotDrink);
+
 
 /**
  * @swagger

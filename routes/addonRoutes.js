@@ -8,7 +8,22 @@ const {
   deleteAddon,
 } = require('../controllers/addonController');
 
+
 const router = express.Router();
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+
+// Configure Cloudinary storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'addon_images',
+    allowed_formats: ['jpg', 'png']
+  }
+});
+
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -69,13 +84,13 @@ const router = express.Router();
  *         meal_category: Pizza
  *         category: Topping
  *         addon_image:
- *           url1: https://res.cloudinary.com/your_cloud_name/image/upload/v1614621000/addons/cheese1.jpg
- *           url2: https://res.cloudinary.com/your_cloud_name/image/upload/v1614621000/addons/cheese2.jpg
+ *           url1: "https://res.cloudinary.com/your_cloud_name/image/upload/v1614621000/addons/cheese1.jpg"
+ *           url2: "https://res.cloudinary.com/your_cloud_name/image/upload/v1614621000/addons/cheese2.jpg"
  *         addon_price:
  *           price: 1.99
- *           currency: USD
+ *           currency: "USD"
  *         addon_availability: true
- *         addon_description: Add extra cheese to your pizza
+ *         addon_description: "Add extra cheese to your pizza"
  *         preparation_time: 1
  */
 
@@ -108,7 +123,10 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post('/', registerAddon);
+router.post('/', upload.fields([{ name: 'url1' }, { name: 'url2' }]), registerAddon);
+
+
+
 
 /**
  * @swagger

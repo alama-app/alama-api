@@ -4,25 +4,19 @@ const cloudinary = require('../config/cloudinaryConfig');
 
 const registerAddon = async (req, res) => {
   try {
-    const { business_id, addon_name, meal_category, category, addon_image, addon_price, addon_availability, addon_description, preparation_time } = req.body;
+    console.log(req);
+    // const { business_id, addon_name, meal_category, category, addon_image, addon_price, addon_availability, addon_description, preparation_time } = req.body;
 
-    // Upload images to Cloudinary
-    const uploadedImage1 = await cloudinary.uploader.upload(addon_image.url1, { folder: 'addons' });
-    const uploadedImage2 = await cloudinary.uploader.upload(addon_image.url2, { folder: 'addons' });
+    const uploadResult1 = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'addons' });
+    console.log(uploadResult1);
+    const url1 = uploadResult1?.url;
+
 
     const newAddon = new Addon({
-      business_id,
-      addon_name,
-      meal_category,
-      category,
+      ...req.body,
       addon_image: {
-        url1: uploadedImage1.secure_url,
-        url2: uploadedImage2.secure_url,
+        url1
       },
-      addon_price,
-      addon_availability,
-      addon_description,
-      preparation_time,
     });
 
     await newAddon.save();

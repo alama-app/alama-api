@@ -7,8 +7,21 @@ const {
   updateSoftDrink,
   deleteSoftDrink,
 } = require('../controllers/softDrinkController');
-
 const router = express.Router();
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+
+// Configure Cloudinary storage for soft drink images
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'soft_drink_images',
+    allowed_formats: ['jpg', 'png']
+  }
+});
+
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -95,7 +108,7 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/SoftDrink'
  *     responses:
@@ -108,25 +121,8 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post('/', registerSoftDrink);
+router.post('/', upload.fields([{ name: 'url1' }, { name: 'url2' }]), registerSoftDrink);
 
-/**
- * @swagger
- * /api/softDrinks:
- *   get:
- *     summary: Get all soft drinks
- *     tags: [Soft Drinks]
- *     responses:
- *       200:
- *         description: A list of all soft drinks
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/SoftDrink'
- */
-router.get('/', getAllSoftDrinks);
 
 /**
  * @swagger

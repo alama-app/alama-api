@@ -4,10 +4,8 @@ const cloudinary = require('../config/cloudinaryConfig');
 
 const registerFood = async (req, res) => {
   try {
-   console.log("Inside register foood")
-   console.log(req.files.url1[0]);
+
     const uploadResult1 = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'foods' });
-    console.log("Uploaded url1:", uploadResult1);
     const url1 = uploadResult1.url;
    
 

@@ -9,6 +9,19 @@ const {
 } = require('../controllers/fruitController');
 
 const router = express.Router();
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'fruit_images',
+    allowed_formats: ['jpg', 'png']
+  }
+});
+
+const upload = multer({ storage });
 
 /**
  * @swagger
@@ -95,7 +108,7 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/Fruit'
  *     responses:
@@ -108,7 +121,7 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post('/', registerFruit);
+router.post('/', upload.fields([{ name: 'url1' }, { name: 'url2' }]), registerFruit);
 
 /**
  * @swagger

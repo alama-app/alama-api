@@ -4,25 +4,16 @@ const cloudinary = require('../config/cloudinaryConfig');
 
 const registerHotDrink = async (req, res) => {
   try {
-    const { business_id, hotDrink_name, meal_category, category, hotDrink_image, hotDrink_price, hotDrink_availability, hotDrink_description, preparation_time } = req.body;
 
-    // Upload images to Cloudinary
-    const uploadedImage1 = await cloudinary.uploader.upload(hotDrink_image.url1, { folder: 'hotDrinks' });
-    const uploadedImage2 = await cloudinary.uploader.upload(hotDrink_image.url2, { folder: 'hotDrinks' });
-
+    const uploadResult1 = await cloudinary.uploader.upload(req.files.url1[0].path, { folder: 'hotDrinks' });
+    console.log(uploadResult1);
+    const url1 = uploadResult1.url;
+    
     const newHotDrink = new HotDrink({
-      business_id,
-      hotDrink_name,
-      meal_category,
-      category,
+      ...req.body,
       hotDrink_image: {
-        url1: uploadedImage1.secure_url,
-        url2: uploadedImage2.secure_url,
+        url1
       },
-      hotDrink_price,
-      hotDrink_availability,
-      hotDrink_description,
-      preparation_time,
     });
 
     await newHotDrink.save();
