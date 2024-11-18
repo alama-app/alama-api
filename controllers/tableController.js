@@ -1,15 +1,34 @@
 const Table = require('../models/tableModel');
+const QRCode = require('qrcode'); 
+const cloudinary = require('../config/cloudinaryConfig');
 
 const registerTable = async (req, res) => {
   try {
     const { tableNumber, status, capacity, business_id } = req.body;
-    
-    if (tableNumber == null || status == null || capacity == null || business_id == null) {
-      return res.status(400).json({ message: 'Required fields are missing' });
+
+    const existingTable = await Table.findOne({ tableNumber, business_id });
+    if (existingTable) {
+      return res.status(409).json({ message: 'Table number already exists.' });
     }
 
-    const newTable = new Table({ tableNumber, status, capacity, business_id });
+    const baseUrl = 'https://alama-client.vercel.app/admin/dashboard'; 
+    const tableUrl = `${baseUrl}/${business_id}`;
+
+    const qrCodeData = await QRCode.toDataURL(tableUrl);
+
+    const uploadResult = await cloudinary.uploader.upload(qrCodeData, { folder: 'tables_qr_codes' });
+    const qrCodeUrl = uploadResult.url;
+
+    const newTable = new Table({
+      tableNumber,
+      status,
+      capacity,
+      business_id,
+      qr_code: qrCodeUrl
+    });
+
     await newTable.save();
+
     res.status(201).json({ message: 'Table registered successfully', table: newTable });
   } catch (error) {
     res.status(400).json({ message: error.message });

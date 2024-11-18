@@ -100,10 +100,46 @@ const getStaffById = async (req, res) => {
     }
 };
 
+const updateStaff = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const updateData = req.body;
+
+      if (req.files && req.files.image) {
+          const uploadResult = await cloudinary.uploader.upload(req.files.image[0].path, { folder: 'staffs' });
+          updateData.staff_image = uploadResult.url;
+      }
+
+      const updatedStaff = await Staff.findByIdAndUpdate(id, updateData, { new: true });
+
+      if (!updatedStaff) return res.status(404).json({ message: 'Staff not found' });
+
+      res.status(200).json({ message: 'Staff updated successfully', staff: updatedStaff });
+  } catch (error) {
+      res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteStaff = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const deletedStaff = await Staff.findByIdAndDelete(id);
+
+      if (!deletedStaff) return res.status(404).json({ message: 'Staff not found' });
+
+      res.status(200).json({ message: 'Staff deleted successfully' });
+  } catch (error) {
+      res.status(400).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
     registerStaff,
     staffLogin,
+    updateStaff,
     getStaffByBusinessId,
+    deleteStaff,
     getStaffByNameAndBusinessId,
     getStaffById
 };

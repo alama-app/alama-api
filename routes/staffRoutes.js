@@ -6,6 +6,8 @@ const cloudinary = require('../config/cloudinaryConfig');
 const {
     registerStaff,
     staffLogin,
+    updateStaff,
+    deleteStaff,
     getStaffByBusinessId,
     getStaffByNameAndBusinessId,
     getStaffById
@@ -250,5 +252,72 @@ router.get('/search', getStaffByNameAndBusinessId);
  *         description: Bad request
  */
 router.get('/:id', getStaffById);
+
+/**
+ * @swagger
+ * /api/staffs/{id}:
+ *   put:
+ *     summary: Update a staff by ID
+ *     tags: [Staffs]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The staff ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               staff_name:
+ *                 type: string
+ *               staff_designation:
+ *                 type: string
+ *               staff_category:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: The staff was successfully updated
+ *       404:
+ *         description: Staff not found
+ *       400:
+ *         description: Bad request
+ */
+router.put('/:id', upload.single('image'), updateStaff);
+
+/**
+ * @swagger
+ * /api/staffs/{id}:
+ *   delete:
+ *     summary: Delete a staff by ID
+ *     tags: [Staffs]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The staff ID
+ *     responses:
+ *       200:
+ *         description: The staff was successfully deleted
+ *       404:
+ *         description: Staff not found
+ *       400:
+ *         description: Bad request
+ */
+router.delete('/:id', deleteStaff);
+
 
 module.exports = router;
